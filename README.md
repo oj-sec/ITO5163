@@ -16,7 +16,7 @@ Visualisation of comparative entropy against a 1.2 MiB SQL file using a 64 byte 
 
 ### Build
 
-To build the release binary, change to the project root directory and run:
+To build the release binary for your operating system and architecture, change to the project root directory and run (requires rust & cargo installation):
 
 ```cargo build --release```
 
@@ -36,7 +36,6 @@ Also included is a Python script to recursively pipe inputs to the binary to gat
 - `--output` or `-o` - output file (ndJSON)
 - `--stripe` or `-s` - number of bytes to encrypt per stripe
 - `--skip` or `-k` - number of bytes to skip between stripes
-
 
 ### Example outputs
 
