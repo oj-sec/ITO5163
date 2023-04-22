@@ -1,12 +1,18 @@
 # ITO5163 
 
-## ChaCha20 implementation to evade write-entropy based inspection
+## 'Striped' ChaCha20 to evade write-entropy based inspection
 
-This repository contains a rust based proof of concept for implementing 'striped' ChaCha20 encryption of files to evade ransomware prevention solutions based on inspecting the entropy of data passed to disk-write system calls. A write-entropy-based solution was sugguested by Elkhail et al in "Seamlessly Safeguarding Data Against Ransomware Attacks" published IEEE Transactions on Dependable and Secure Computing volume 20, issue 1, published January 2023. 
+This repository contains a rust based proof (PoC) of concept for implementing 'striped' ChaCha20 encryption of files to evade ransomware prevention solutions based on inspecting the entropy of data passed to disk-write system calls. An example of a write-entropy-based solution was suggested by Elkhail et al in "Seamlessly Safeguarding Data Against Ransomware Attacks" published IEEE Transactions on Dependable and Secure Computing volume 20, issue 1, January 2023. 
 
-This approach is intended to demonstrate that threat actors can evade write-entropy-based inspection and increase the performance of encryption routines by encrypting 'stipes' through target files, followed by a segment of untouched data. 
+This PoC is intended to demonstrate that threat actors can evade write-entropy-based inspection and increase the performance of encryption routines by encrypting 'stripes' through target files, followed by a segment of untouched data. The encryption approach implemented here is not novel, and has been implemented in contemporary ransomware including Black Basta's ransomware variant.  
 
-The 'striped' encryption approach implemented here is not novel, and has been implemented in contemporary ransomware including Black Basta's ransomware variant.  
+![image](assets/flatfile_results.png)
+
+Visualisation of comparative entropy against 5 MiB of null bytes using a 64 byte stripe and a 192 byte skip.
+
+![image](assets/sql_results.png)
+
+Visualisation of comparative entropy against a 1.2 MiB SQL file using a 64 byte stripe and a 192 byte skip.
 
 ### Build
 
@@ -21,8 +27,9 @@ The binary accepts the following arguments:
 - `--stripe` - number of bytes to encrypt per stripe
 - `--skip` - number of bytes to skip between stripes
 - optionally, `-d` or `--data` - return results as JSON strings to aid data analysis
+- optionally, `-w` or `--write` - write the encrypted files to disk
 
-Note that the PoC examines the Shannon entropy of the comparative buffers in memory and does not actually write encrypted data to disk.
+Note that the PoC should never overwrite the target file.
 
 ### Example outputs
 

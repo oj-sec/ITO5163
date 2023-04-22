@@ -6,6 +6,7 @@ use std::time::Instant;
 use chacha20::ChaCha20;
 use chacha20::cipher::{KeyIvInit, StreamCipher};
 use serde::{Deserialize, Serialize};
+use std::io::prelude::*;
 
 // Command line argument parser
 /// Proof of concept for a ChaCha20 implementation with reduced IO page entropy 
@@ -24,6 +25,9 @@ struct Args {
     /// Display in data mode
     #[arg(long, short, action)]
     data: bool,
+    /// Write encrypted files
+    #[arg(long, short, action)]
+    write: bool,
 }
 
 // Struct to collect results match results per file
@@ -125,6 +129,7 @@ fn main() {
     let stripe = args.stripe;
     let skip = args.skip;
     let data_mode = args.data;
+    let write_mode = args.write;
 
     // Show the starting entropy of the file
     let read_start = Instant::now(); 
@@ -140,7 +145,6 @@ fn main() {
     let full_encryption_entropy = get_shannon_entropy(&full_encryption);
     let full_encryption_entropy_delta = full_encryption_entropy - starting_entropy;
 
-
     // Perform a striped ChaCha20 encryption on a file & caclulate the entropy
     let striped_encryption_start = Instant::now(); 
     let striped_ecnryption = striped_encryption_coordinator(file_bytes.clone(), stripe, skip);
@@ -148,6 +152,18 @@ fn main() {
     let striped_encryption_entropy = get_shannon_entropy(&striped_ecnryption);
     let striped_encryption_entropy_delta = striped_encryption_entropy - starting_entropy;
 
+    // Handle write mode
+    if write_mode == true {
+    
+        let mut full_encrypt_file = File::create(file.clone() + ".full_encrypt").unwrap();
+        full_encrypt_file.write_all(&full_encryption).unwrap();
+
+        let mut striped_encrypt_file = File::create(file.clone() + ".striped_encrypt").unwrap();
+        striped_encrypt_file.write_all(&striped_ecnryption).unwrap();
+
+    }
+
+    // Handle data display mode
     if data_mode == false {
 
         println!("File name: {}", &file);
