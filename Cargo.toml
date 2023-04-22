@@ -1,0 +1,13 @@
+[package]
+name = "ITO5163"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+chacha20 = "0.9.1"
+clap = { version = "4.2.4", features = ["derive"] }
+entropy = "0.4.1"
+serde = { version = "1.0.155", features = ["derive"] }
+serde_json = "1.0.94"
