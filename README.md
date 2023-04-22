@@ -31,6 +31,13 @@ The binary accepts the following arguments:
 
 Note that the PoC should never overwrite the target file.
 
+Also included is a Python script to recursively pipe inputs to the binary to gather large amounts of data. The Python script, `test_coordinator.py` accepts the following arguments:
+- `--path` or `-p` - the directory to start recursing from
+- `--output` or `-o` - output file (ndJSON)
+- `--stripe` or `-s` - number of bytes to encrypt per stripe
+- `--skip` or `-k` - number of bytes to skip between stripes
+
+
 ### Example outputs
 
 normal mode:

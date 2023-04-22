@@ -7,6 +7,7 @@ use chacha20::ChaCha20;
 use chacha20::cipher::{KeyIvInit, StreamCipher};
 use serde::{Deserialize, Serialize};
 use std::io::prelude::*;
+use std::process;
 
 // Command line argument parser
 /// Proof of concept for a ChaCha20 implementation with reduced IO page entropy 
@@ -137,6 +138,13 @@ fn main() {
     let read_finish = read_start.elapsed().as_secs_f32();
     let file_len = file_bytes.len();
     let starting_entropy = get_shannon_entropy(&file_bytes);
+
+    if file_len < stripe {
+        if data_mode == false {
+            println!("Exiting - file size smaller than stripe size, comparison cannot be performed.")
+        }
+        process::exit(1);
+    }
 
     // Perform a full ChaCha20 encryption on a file & caclulate the entropy
     let full_encryption_start = Instant::now(); 
