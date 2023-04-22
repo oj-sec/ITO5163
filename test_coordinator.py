@@ -10,10 +10,15 @@ import json
 
 def start(path, output, stripe, skip):
 
-    for file in glob.glob(path + "/**/*", recursive=True):
-        if os.path.isfile(os.path.join(path, file)):
-            print(f"Processing target: {file}")
+    targets = glob.glob(path + "/**/*", recursive=True)
+    total = len(targets)
+    counter = 1
 
+    for file in targets:
+        if os.path.isfile(os.path.join(path, file)):
+            print(f"Processing target {counter}  of {total}: {file}")
+            counter = counter + 1
+            
             feature = subprocess.run(["./target/release/ITO5163", "--path", file, "--stripe", stripe, "--skip", skip, '-d'], capture_output=True, text=True)
             
             if len(feature.stdout) > 0:
