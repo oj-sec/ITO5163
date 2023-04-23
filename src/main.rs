@@ -91,17 +91,22 @@ fn chacha20_encrypt(bytes: &[u8]) -> Vec<u8>{
 
 }
 
+// Function to coodinate encrypting 'stripes' of a byte sequence
 fn striped_encryption_coordinator(bytes: Vec<u8>, stripe:usize, skip: usize) -> Vec<u8> {
 
+    // Create a copy of the plaintext to operate on
     let mut ciphertext = bytes;
+
+    // Set a pointer to zero
     let mut pointer = 0;
 
+    // Obtain the length of the byte sequence 
     let len = ciphertext.len();
 
-    // Iterate the entire file, encrypting 64 bytes and then skipping 192 bytes
+    // Iterate the entire sequence, encrypting {stripe} bytes and then skipping {skip} bytes
     while pointer < len {
 
-        // Borrow 64 bytes from the plaintext starting at the pointer
+        // Borrow {stripe} bytes from the plaintext starting at the pointer
         let encryption_target = &ciphertext[pointer..pointer + stripe];
 
         // Encrypt the borrowed bytes
@@ -113,7 +118,7 @@ fn striped_encryption_coordinator(bytes: Vec<u8>, stripe:usize, skip: usize) -> 
             pointer = pointer + 1;
         }
 
-        // Iterate the pointer to skip a segment of the the file
+        // Increase the pointer to skip a segment of the the file
         pointer = pointer + skip;
 
     }
